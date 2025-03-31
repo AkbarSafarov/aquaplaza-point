@@ -18,68 +18,64 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     }
+
+    ymaps.ready(init);
+
+    function init() {
+        const myMap = new ymaps.Map("map", {
+            center: [55.7558, 37.6173], // Центр
+            zoom: 10
+        });
+
+        myMap.behaviors.disable("scrollZoom"); // Отключаем зум колесом мыши
+
+        const points = [];
+        const pointsElement = document.querySelectorAll(".list_item .item");
+
+        if(pointsElement){
+            pointsElement.forEach(item => {
+                const coords = item.getAttribute("data-coords").split(",").map(Number);
+                const title = item.querySelector(".title").textContent.trim();
+                const address = item.querySelector(".contact_body.address").textContent.trim();
+                const phone = item.querySelector(".phone").textContent.trim();
+                const email = item.querySelector(".email").textContent.trim();
+                const worktime = item.querySelector(".worktime").textContent.trim();
+                const img = item.querySelector(".image img").getAttribute("src");
+                const urlPage = item.querySelector(".link").getAttribute("href");
+
+                points.push({ coords, title, address, phone, email, worktime, img, urlPage });
+            });
+        }
+
+        points.forEach(point => {
+            const placemark = new ymaps.Placemark(
+                point.coords,
+                {
+                    balloonContent: `
+                        <div class="baloon_map">
+                            <a href="${point.urlPage}" class="name">${point.title}</a>
+                            <img src="${point.img}" style="width:100%; margin:10px 0;">
+                            <p><b>Адрес:</b> ${point.address}</p>
+                            <p><b>Телефон:</b> ${point.phone}</p>
+                            <p><b>Email:</b> <a href="mailto:${point.email}">${point.email}</a></p>
+                            <div class="baloon_bottom">
+                                <p><b>График работы:</b> ${point.worktime}</p>
+                                <a href="${point.urlPage}" style="color: blue;">Подробнее</a>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    preset: "islands#icon",
+                    iconColor: "#0095b6"
+                }
+            );
+
+            myMap.geoObjects.add(placemark);
+        });
+    }
 });
 
-ymaps.ready(init);
-
-function init() {
-    var myMap = new ymaps.Map("map", {
-        center: [55.7558, 37.6173], // Москва
-        zoom: 10
-    });
-
-    myMap.behaviors.disable("scrollZoom");
-
-    var points = [
-        {
-            coords: [55.750446, 37.617494],
-            title: "ТК Твой дом (г. Мытищи, Остафьевское ш., 2)",
-            address: "г Москва, шоссе Энтузиастов, д 12 к 2",
-            phone: "+74954765101",
-            email: "info@site.ru",
-            worktime: "Пн.-Пт. с 10 до 19",
-            img: "files/point1.jpg",
-            urlPage: "#"
-        },
-        {
-            coords: [55.689444, 37.856667],
-            title: "ТК Новый рынок (г. Видное, ул. Центральная, 5)",
-            address: "г Видное, ул. Центральная, д 5",
-            phone: "+74951234567",
-            email: "contact@site.ru",
-            worktime: "Ежедневно с 9 до 21",
-            img: "files/point2.jpg",
-            urlPage: "#"
-        }
-    ];
-
-    points.forEach(point => {
-        var placemark = new ymaps.Placemark(
-            point.coords,
-            {
-                balloonContent: `
-                    <div class="baloon_map">
-                        <a href="${point.urlPage}" class="name">${point.title}</a>
-                        <img src="${point.img}" style="width:100%; margin:10px 0;">
-                        <p><b>Адрес:</b> ${point.address}</p>
-                        <p><b>Телефон:</b> ${point.phone}</p>
-                        <p><b>Email:</b> <a href="mailto:${point.email}">${point.email}</a></p>
-                        <div class="baloon_bottom">
-                            <p><b>График работы:</b> ${point.worktime}</p>
-                            <a href="${point.urlPage}" style="color: blue;">Подробнее</a>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                preset: "islands#icon",
-                iconColor: "#0095b6"
-            }
-        );
-
-        myMap.geoObjects.add(placemark);
-    });
-}
 
 
 $(function(){
