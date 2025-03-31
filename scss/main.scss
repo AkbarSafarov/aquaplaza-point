@@ -1,0 +1,330 @@
+@charset "utf-8";
+
+html, body {margin: 0;height: 100%;min-height: 100%;}
+
+:root {
+  --font-family: 'Roboto', sans-serif;
+}
+
+.point_tab_block_wr {
+
+    *{
+        font-family: var(--font-family);
+    }
+
+    .tabs_title {
+        position: relative;
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: -10px;
+            right: -10px;
+            background: #f4f4f4;
+        }
+
+        ul {
+            position: relative;
+            z-index: 1;
+            padding: 0;
+            list-style: none;
+            font-size: 0;
+
+            li {
+                display: inline-block;
+                vertical-align: top;
+
+                a {
+                    padding: 26px 17px 30px;
+                    position: relative;
+                    text-decoration: none;
+                    font-weight: 400;
+                    font-size: 16px;
+                    text-transform: uppercase;
+                    color: #000;
+                    transition: all .3s;
+                    display: block;
+
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        height: 5px;
+                        background: #216ab1;
+                        opacity: 0;
+                        transition: all .3s;
+                    }
+                }
+
+                &.active a {
+                    color: #216ab1;
+                    font-weight: 700;
+
+                    &:before{
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+
+    .tabs_content {
+        padding: 38px 0 0;
+
+        .tab_body {
+            display: none;
+
+            &.active {
+                display: block;
+            }
+        }
+    }
+
+    .list_item {
+
+        .item {
+            display: flex;
+            margin-bottom: 24px;
+            align-items: start;
+            gap: 20px;
+            padding: 20px 64px 20px 20px;
+            border: 1px solid #dcdcdc;
+            position: relative;
+
+            .link {
+                position: absolute;
+                top: -1px;
+                bottom: -1px;
+                right: -1px;
+                width: 30px;
+                text-decoration: none;
+                font-size: 0;
+                background: #216ab1 url("data:image/svg+xml,%3Csvg width='11' height='19' viewBox='0 0 11 19' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L9.5 9.5L1 18' stroke='white' stroke-width='2' /%3E%3C/svg%3E") 50% no-repeat;
+            }
+
+            .image {
+                flex: 0 0 320px;
+
+                img {
+                    max-width: 100%;
+                    width: 100%;
+                }
+            }
+
+            .text{
+                flex: 1 1 auto;
+
+                .name {
+                    font-family: var(--font-family);
+                    font-weight: 500;
+                    font-size: 20px;
+                    line-height: 120%;
+                    color: #216ab1;
+                    padding: 0 0 19px;
+
+                    a {
+                        text-decoration: none;
+                        color: #216ab1;
+                    }
+                }
+
+                .body {
+                    font-family: var(--font-family);
+                    font-weight: 400;
+                    font-size: 16px;
+                    line-height: 150%;
+                    color: #000;
+
+                    p {
+                        &:first-child {
+                            margin-top: 0;
+                        }
+                    }
+
+                    ul {
+                        padding: 0 0 0 26px;
+                    }
+                }
+            }
+
+            .item_contacts {
+                flex: 0 0 294px;
+
+                .contact {
+                    margin-bottom: 9px;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+
+                .contact_name {
+                    font-family: var(--font-family);
+                    font-weight: 400;
+                    font-size: 16px;
+                    line-height: 150%;
+                    color: #858585;
+                    padding-bottom: 4px;
+                }
+
+                .contact_body {
+                    font-family: var(--font-family);
+                    font-weight: 600;
+                    font-size: 20px;
+                    line-height: 120%;
+                    color: #216ab1;
+
+                    a {
+                        color: #216ab1;
+                        text-decoration: none;
+                    }
+                }
+            }
+
+            @media all and (max-width: 1024px){
+                flex-wrap:wrap;
+
+                .text {
+                    flex: none;
+                    width: 100%;
+                    order: 1;
+                }
+            }
+
+            @media all and (max-width: 767px) {
+                padding: 16px 16px 46px;
+                .image,.item_contacts {
+                    flex: 0 0 calc(50% - 10px);
+                }
+
+                .link {
+                    left: -1px;
+                    top: auto;
+                    bottom: -1px;
+                    width: auto;
+                    height: 30px;
+                    background-position: calc(100% - 16px) 50%;
+                    font-size: 14px;
+                    color: #fff;
+                    padding: 0 16px;
+                    line-height: 30px;
+                }
+            }
+
+            @media all and (max-width: 600px) {
+                .image,.item_contacts {
+                    flex: none;
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    .ymaps-2-1-79-balloon__content{
+        padding: 20px 0 20px 20px !important;
+    }
+
+    .baloon_map {
+        padding-right: 20px;
+
+        .name {
+            font-family: var(--font-family);
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 120%;
+            text-decoration: underline;
+            color: #216ab1;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        img {
+            height: 134px;
+            object-fit: cover;
+            margin: 0 0 10px !important;
+            width: 100%;
+        }
+
+        p {
+            margin: 0 0 6px;
+            font-family: var(--font-family);
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 133%;
+            color: #000;
+
+            b {
+                display: block;
+                font-family: var(--font-family);
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 150%;
+                color: #858585;
+            }
+
+            a {
+                color: #000;
+                text-decoration: none;
+            }
+        }
+
+        .baloon_bottom {
+            display: flex;
+            gap: 20px;
+            align-items: end;
+            justify-content: space-between;
+
+            p {
+                margin: 0;
+            }
+
+            a {
+                font-family: var(--font-family);
+                font-weight: 400;
+                font-size: 18px;
+                line-height: 133%;
+                text-decoration: underline;
+                color: #216ab1;
+            }
+        }
+
+        @media all and (max-width: 500px){
+            width: 250px;
+            padding-right: 10px;
+
+            .name {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            img {
+                height: 110px;
+            }
+
+            p {
+                margin: 0 0 2px;
+                font-size: 14px;
+
+                b {
+                    font-size: 14px;
+                }
+            }
+
+            .baloon_bottom {
+
+                a {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+
+.ymaps-2-1-79-balloon__close+.ymaps-2-1-79-balloon__content {
+    margin-right: 0 !important;
+}
