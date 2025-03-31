@@ -19,21 +19,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    ymaps.ready(init);
+    const pointsElements = document.querySelectorAll(".list_item .item");
 
-    function init() {
-        const myMap = new ymaps.Map("map", {
-            center: [55.7558, 37.6173], // Центр
-            zoom: 10
-        });
+    if(pointsElements.length > 0){        
+        
+        ymaps.ready(init);
 
-        myMap.behaviors.disable("scrollZoom"); // Отключаем зум колесом мыши
+        function init() {
+            const myMap = new ymaps.Map("map", {
+                center: [55.7558, 37.6173], // Центр
+                zoom: 10
+            });
 
-        const points = [];
-        const pointsElement = document.querySelectorAll(".list_item .item");
+            myMap.behaviors.disable("scrollZoom"); // Отключаем зум колесом мыши
 
-        if(pointsElement){
-            pointsElement.forEach(item => {
+            const points = [];
+            
+            pointsElements.forEach(item => {
                 const coords = item.getAttribute("data-coords").split(",").map(Number);
                 const title = item.querySelector(".title").textContent.trim();
                 const address = item.querySelector(".contact_body.address").textContent.trim();
@@ -45,22 +47,69 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 points.push({ coords, title, address, phone, email, worktime, img, urlPage });
             });
-        }
+            points.forEach(point => {
+                const placemark = new ymaps.Placemark(
+                    point.coords,
+                    {
+                        balloonContent: `
+                            <div class="baloon_map">
+                                <a href="${point.urlPage}" class="name">${point.title}</a>
+                                <img src="${point.img}" style="width:100%; margin:10px 0;">
+                                <p><b>Адрес:</b> ${point.address}</p>
+                                <p><b>Телефон:</b> ${point.phone}</p>
+                                <p><b>Email:</b> <a href="mailto:${point.email}">${point.email}</a></p>
+                                <div class="baloon_bottom">
+                                    <p><b>График работы:</b> ${point.worktime}</p>
+                                    <a href="${point.urlPage}" style="color: blue;">Подробнее</a>
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        preset: "islands#icon",
+                        iconColor: "#0095b6"
+                    }
+                );
 
-        points.forEach(point => {
-            const placemark = new ymaps.Placemark(
-                point.coords,
+                myMap.geoObjects.add(placemark);
+            });
+        }
+    }
+
+
+    const pointPage = document.querySelector('.point_page');
+
+    if (pointPage) {
+        ymaps.ready(initPage);
+
+        function initPage() {
+            const coords = pointPage.getAttribute("data-coords").split(",").map(Number);
+            const title = pointPage.querySelector(".title").textContent.trim();
+            const address = pointPage.querySelector(".address").textContent.trim();
+            const phone = pointPage.querySelector(".phone").textContent.trim();
+            const email = pointPage.querySelector(".email").textContent.trim();
+            const worktime = pointPage.querySelector(".worktime").textContent.trim();
+            const img = pointPage.getAttribute("data-img");
+
+            var myMapPage = new ymaps.Map("map_point", {
+                center: coords, // Координаты центра
+                zoom: 10
+            });
+
+            myMapPage.behaviors.disable("scrollZoom");
+
+            var placemark = new ymaps.Placemark(
+                coords, 
                 {
                     balloonContent: `
                         <div class="baloon_map">
-                            <a href="${point.urlPage}" class="name">${point.title}</a>
-                            <img src="${point.img}" style="width:100%; margin:10px 0;">
-                            <p><b>Адрес:</b> ${point.address}</p>
-                            <p><b>Телефон:</b> ${point.phone}</p>
-                            <p><b>Email:</b> <a href="mailto:${point.email}">${point.email}</a></p>
+                            <div class="name">${title}</div>
+                            <img src="${img}" style="width:100%; margin:10px 0;">
+                            <p><b>Адрес:</b> ${address}</p>
+                            <p><b>Телефон:</b> ${phone}</p>
+                            <p><b>Email:</b> <a href="mailto:${email}">${email}</a></p>
                             <div class="baloon_bottom">
-                                <p><b>График работы:</b> ${point.worktime}</p>
-                                <a href="${point.urlPage}" style="color: blue;">Подробнее</a>
+                                <p><b>График работы:</b> ${worktime}</p>
                             </div>
                         </div>
                     `
@@ -71,59 +120,47 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             );
 
-            myMap.geoObjects.add(placemark);
+            myMapPage.geoObjects.add(placemark);
+        }
+    }
+
+    if(document.querySelector('.mySwiper_gal')){
+        const gallSwiper = new Swiper('.mySwiper_gal', {
+            loop: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            loopedSlides: 1,
+            spaceBetween: 47,
+            roundLengths: true,
+            loopAdditionalSlides: 30,
+            navigation: {
+                nextEl: '.swiper-gal-next',
+                prevEl: '.swiper-gal-prev',
+            },
+            lazy: true,
+            breakpoints: {
+                0: {
+                    spaceBetween: 16,
+                },
+                768: {
+                    spaceBetween: 30,
+                },
+                1100: {
+                    spaceBetween: 47,
+                },
+            },
+        });
+
+        lightGallery(document.querySelector('.mySwiper_gal '), {
+            animateThumb: false,
+            zoomFromOrigin: false,
+            allowMediaOverlap: true,
+            toggleThumb: false,
+            selector: 'a',
+            counter: false,
+            download: false
         });
     }
+
 });
 
-
-
-$(function(){
-
-	// $('.slider_block_wr').each(function(){
-	//     const slider = $(this).find('.swiper');
-	//     const sliderId = slider.data('id');
-	//     const sliderClass = '.' + sliderId;
-	//     const arrow = slider.data('arrow');    
-
-	//     const newProductsSwiper = new Swiper(sliderClass, {
-	// 		loop: true,
-	// 		slidesPerView: 1,
-	// 		loopedSlides: 1,
-	// 		navigation: {
-	// 		    nextEl: '.swiper-' + arrow + '-next',
-	// 		    prevEl: '.swiper-' + arrow + '-prev',
-	// 		},
-	// 		pagination: {
-	// 			el: ".swiper-pagination",
-	// 		},
-	// 		effect: "fade",
-	// 		lazy: true
-	//     });
-	// })
-
-
-    // const newProductsSwiper = new Swiper('.slider-wrap_material', {
-    //     loop: false,
-    //     slidesPerView: 5,
-    //     spaceBetween: 0,
-    //     lazy: true,
-    //     breakpoints: {
-    //         0: {
-    //           slidesPerView: 'auto',
-    //           spaceBetween: 12,
-    //           centeredSlides: true,
-    //           loop: true,
-    //         },
-    //         768: {
-    //           slidesPerView: 5,
-    //           spaceBetween: 0,
-    //         },
-    //         1024: {
-    //           slidesPerView: 5,
-    //           spaceBetween: 0,
-    //         },
-    //     },
-    // });
-    
-});
