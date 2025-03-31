@@ -36,43 +36,55 @@ document.addEventListener("DOMContentLoaded", function () {
             const points = [];
             
             pointsElements.forEach(item => {
-                const coords = item.getAttribute("data-coords").split(",").map(Number);
-                const title = item.querySelector(".title").textContent.trim();
-                const address = item.querySelector(".contact_body.address").textContent.trim();
-                const phone = item.querySelector(".phone").textContent.trim();
-                const email = item.querySelector(".email").textContent.trim();
-                const worktime = item.querySelector(".worktime").textContent.trim();
-                const img = item.querySelector(".image img").getAttribute("src");
-                const urlPage = item.querySelector(".link").getAttribute("href");
+                const coords = item.getAttribute("data-coords")?.split(",").map(Number) || [0, 0];
+                const title = item.querySelector(".title")?.textContent.trim();
+                const address = item.querySelector(".contact_body.address")?.textContent.trim();
+                const phone = item.querySelector(".phone")?.textContent.trim();
+                const email = item.querySelector(".email")?.textContent.trim();
+                const worktime = item.querySelector(".worktime")?.textContent.trim();
+                const img = item.querySelector(".image img")?.getAttribute("src");
+                const urlPage = item.querySelector(".link")?.getAttribute("href");
 
                 points.push({ coords, title, address, phone, email, worktime, img, urlPage });
             });
+
             points.forEach(point => {
+                let balloonContent = `<div class="baloon_map">`;
+
+                if (point.title) {
+                    balloonContent += `<a href="${point.urlPage || '#'}" class="name">${point.title}</a>`;
+                }
+                if (point.img) {
+                    balloonContent += `<img src="${point.img}" style="width:100%; margin:10px 0;">`;
+                }
+                if (point.address) {
+                    balloonContent += `<p><b>Адрес:</b> ${point.address}</p>`;
+                }
+                if (point.phone) {
+                    balloonContent += `<p><b>Телефон:</b> <a href="tel:${point.phone}">${point.phone}</a></p>`;
+                }
+                if (point.email) {
+                    balloonContent += `<p><b>Email:</b> <a href="mailto:${point.email}">${point.email}</a></p>`;
+                }
+                balloonContent += `<div class="baloon_bottom">`;
+                if (point.worktime) {
+                    balloonContent += `<div class="baloon_bottom"><p><b>График работы:</b> ${point.worktime}</p></div>`;
+                }
+                if (point.urlPage) {
+                    balloonContent += `<a href="${point.urlPage}" style="color: blue;">Подробнее</a>`;
+                }
+
+                balloonContent += `</div></div>`;
+
                 const placemark = new ymaps.Placemark(
                     point.coords,
-                    {
-                        balloonContent: `
-                            <div class="baloon_map">
-                                <a href="${point.urlPage}" class="name">${point.title}</a>
-                                <img src="${point.img}" style="width:100%; margin:10px 0;">
-                                <p><b>Адрес:</b> ${point.address}</p>
-                                <p><b>Телефон:</b> ${point.phone}</p>
-                                <p><b>Email:</b> <a href="mailto:${point.email}">${point.email}</a></p>
-                                <div class="baloon_bottom">
-                                    <p><b>График работы:</b> ${point.worktime}</p>
-                                    <a href="${point.urlPage}" style="color: blue;">Подробнее</a>
-                                </div>
-                            </div>
-                        `
-                    },
-                    {
-                        preset: "islands#icon",
-                        iconColor: "#0095b6"
-                    }
+                    { balloonContent },
+                    { preset: "islands#icon", iconColor: "#0095b6" }
                 );
 
                 myMap.geoObjects.add(placemark);
             });
+
         }
     }
 
@@ -106,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="name">${title}</div>
                             <img src="${img}" style="width:100%; margin:10px 0;">
                             <p><b>Адрес:</b> ${address}</p>
-                            <p><b>Телефон:</b> ${phone}</p>
+                            <p><b>Телефон:</b> <a href="tel:${phone}">${phone}</a></p>
                             <p><b>Email:</b> <a href="mailto:${email}">${email}</a></p>
                             <div class="baloon_bottom">
                                 <p><b>График работы:</b> ${worktime}</p>
